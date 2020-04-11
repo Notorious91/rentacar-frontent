@@ -2,7 +2,9 @@ import * as Actions from '../actions/Actions';
 
 const initialState = {
     loader: false,
-    loaderCount: 0
+    loaderCount: 0,
+    carCategories: [],
+    carModels: []
 };
 
 const siteDataReducers = (state = initialState, action) => {
@@ -23,6 +25,16 @@ const siteDataReducers = (state = initialState, action) => {
                 ...state,
                 loaderCount: 0,
                 loader: false
+            };
+        case Actions.LOAD_CAR_CATEGORIES:
+            return {
+                ...state,
+                carCategories: action.carCategories
+            };
+        case Actions.LOAD_CAR_MODELS:
+            return {
+                ...state,
+                carModels: action.carModels
             };
 
         default: return state;

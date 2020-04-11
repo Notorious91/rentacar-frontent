@@ -6,25 +6,39 @@ import * as Actions from "../../../actions/Actions";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import strings from "../../../localization";
-import AddUser from "./AddUser";
 import {withSnackbar} from "notistack";
 import {ListItemIcon, ListItemText, Menu, MenuItem, TableCell} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVert from '@material-ui/icons/MoreVert';
 import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { getOrders, deleteOrder } from '../../../services/admin/OrderAdminService';
 
 
-class UserList extends TablePage {
+class CarModelList extends TablePage {
 
     tableDescription = [
-        { key: 'email', label: strings.userList.email },
-        { key: 'firstName', label: strings.userList.firstName },
-        { key: 'lastName', label: strings.userList.lastName }
+        { key: 'description', label: strings.orderList.description },
+        { key: 'price', label: strings.orderList.price },
+        // { key: 'status', label: strings.orderList.status },
+        { key: 'user', label: strings.orderList.user, transform: 'columnUserRender' }
     ];
 
     constructor(props) {
         super(props);
+
+        this.state.showView = false;
+        this.state.showAdd = false;
+        this.state.showEdit = false;
+    }
+
+    columnUserRender(item) {
+
+        if(!item) {
+            return '';
+        }
+
+        return item.firstName + ' ' + item.lastName;
     }
 
     fetchData() {
@@ -33,7 +47,7 @@ class UserList extends TablePage {
             lockTable: true
         });
 
-        getUsers({
+        getOrders({
             page: this.state.searchData.page,
             perPage: this.state.searchData.perPage,
             search: this.state.searchData.search.toLowerCase()
@@ -56,11 +70,15 @@ class UserList extends TablePage {
     }
 
     getPageHeader() {
-        return <h1>{ strings.userList.pageTitle }</h1>;
+        return <h1>{ strings.carModelList.pageTitle }</h1>;
     }
 
     renderAddContent() {
-        return <AddUser onCancel={ this.onCancel } onFinish={ this.onFinish }/>
+        //return <AddCarModel onCancel={ this.onCancel } onFinish={ this.onFinish }/>
+    }
+
+    renderEditContent(item) {
+        //return <EditCarModel onCancel={ this.onCancel } onFinish={ this.onFinish } data={ item }/>
     }
 
     delete(item) {
@@ -69,7 +87,7 @@ class UserList extends TablePage {
             lockTable: true
         });
 
-        deleteUser(item.id).then(response => {
+        deleteOrder(item.id).then(response => {
 
             if(response && !response.ok) {
                 this.onFinish(null);
@@ -109,53 +127,6 @@ class UserList extends TablePage {
             });
         });
     }
-
-    renderRowMenu(index, item) {
-
-        let ariaOwns = 'action-menu-' + index;
-
-        return(
-            <TableCell>
-                <IconButton
-                    aria-owns={ this.state.anchorEl ? ariaOwns : undefined }
-                    aria-haspopup="true"
-                    onClick={ (event) => this.handleMenuClick(event, ariaOwns) }
-                >
-                    <MoreVert/>
-                </IconButton>
-                {
-                    ariaOwns === this.state.ariaOwns &&
-                    <Menu
-                        id={ ariaOwns }
-                        anchorEl={ this.state.anchorEl }
-                        open={ Boolean(this.state.anchorEl) }
-                        onClose={ () => this.handleMenuClose() }
-                    >
-                        {
-                            !item[this.deletedField] &&
-                            <MenuItem onClick={ () => this.handleMenuDelete(item) }>
-                                <ListItemIcon>
-                                    <DeleteIcon/>
-                                </ListItemIcon>
-                                <ListItemText inset primary={ strings.table.delete }/>
-                            </MenuItem>
-                        }
-                        {
-                            item[this.deletedField] &&
-                            <MenuItem onClick={ () => this.handleRestore(item) }>
-                                <ListItemIcon>
-                                    <UndoIcon/>
-                                </ListItemIcon>
-                                <ListItemText inset primary={ strings.table.undo }/>
-                            </MenuItem>
-                        }
-
-                    </Menu>
-                }
-
-            </TableCell>
-        );
-    }
 }
 
 function mapDispatchToProps(dispatch)
@@ -170,4 +141,4 @@ function mapStateToProps({ menuReducers })
     return { menu: menuReducers };
 }
 
-export default withSnackbar(withRouter(connect(mapStateToProps, mapDispatchToProps)(UserList)));
+export default withSnackbar(withRouter(connect(mapStateToProps, mapDispatchToProps)(CarModelList)));

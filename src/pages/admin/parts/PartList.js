@@ -6,25 +6,44 @@ import * as Actions from "../../../actions/Actions";
 import {withRouter} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import strings from "../../../localization";
-import AddUser from "./AddUser";
 import {withSnackbar} from "notistack";
 import {ListItemIcon, ListItemText, Menu, MenuItem, TableCell} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVert from '@material-ui/icons/MoreVert';
 import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { deletePart, getParts } from '../../../services/admin/PartAdminService';
+import AddPart from './AddPart';
+import EditPart from './EditPart';
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { addOrder } from '../../../services/admin/OrderAdminService';
 
-
-class UserList extends TablePage {
+class PartList extends TablePage {
 
     tableDescription = [
-        { key: 'email', label: strings.userList.email },
-        { key: 'firstName', label: strings.userList.firstName },
-        { key: 'lastName', label: strings.userList.lastName }
+        { key: 'name', label: strings.partList.name },
+        { key: 'price', label: strings.partList.price }
     ];
 
     constructor(props) {
         super(props);
+
+        this.state.showView = false;
+    }
+
+    componentDidMount() {
+
+        this.state.showAdd = this.props.auth.user.admin;
+        this.state.showEdit = this.props.auth.user.admin;
+        this.state.showDelete = this.props.auth.user.admin;
+        this.fetchData();
+    }
+
+    componentWillReceiveProps(props) {
+        this.state.showAdd = this.props.auth.user.admin;
+        this.state.showEdit = this.props.auth.user.admin;
+        this.state.showDelete = this.props.auth.user.admin;
     }
 
     fetchData() {
@@ -33,7 +52,7 @@ class UserList extends TablePage {
             lockTable: true
         });
 
-        getUsers({
+        getParts({
             page: this.state.searchData.page,
             perPage: this.state.searchData.perPage,
             search: this.state.searchData.search.toLowerCase()
@@ -56,11 +75,15 @@ class UserList extends TablePage {
     }
 
     getPageHeader() {
-        return <h1>{ strings.userList.pageTitle }</h1>;
+        return <h1>{ strings.partList.pageTitle }</h1>;
     }
 
     renderAddContent() {
-        return <AddUser onCancel={ this.onCancel } onFinish={ this.onFinish }/>
+        return <AddPart onCancel={ this.onCancel } onFinish={ this.onFinish }/>
+    }
+
+    renderEditContent(item) {
+        return <EditPart onCancel={ this.onCancel } onFinish={ this.onFinish } data={ item }/>
     }
 
     delete(item) {
@@ -69,14 +92,14 @@ class UserList extends TablePage {
             lockTable: true
         });
 
-        deleteUser(item.id).then(response => {
+        deletePart(item.id).then(response => {
 
             if(response && !response.ok) {
                 this.onFinish(null);
                 return;
             }
 
-            this.props.enqueueSnackbar(strings.userList.userDelete, { variant: 'success' });
+            this.props.enqueueSnackbar(strings.partList.deleted, { variant: 'success' });
 
             this.onFinish(item);
             this.cancelDelete();
@@ -87,26 +110,17 @@ class UserList extends TablePage {
         });
     }
 
-    restore(item) {
+    order(item) {
 
-        this.setState({
-            lockTable: true
-        });
+        let order = {
+            description: 'Part: ' + item.name,
+            status: 1,
+            price: parseFloat(item.price)
+        }
 
-        restoreUser(item.id).then(response => {
+        addOrder(order).then(response => {
 
-            if(response && !response.ok) {
-                this.onFinish(null);
-                return;
-            }
-
-            this.props.enqueueSnackbar(strings.userList.userRestored, { variant: 'success' });
-
-            this.onFinish(item);
-
-            this.setState({
-                lockTable: false
-            });
+            this.props.history.push('/orders')
         });
     }
 
@@ -132,7 +146,37 @@ class UserList extends TablePage {
                         onClose={ () => this.handleMenuClose() }
                     >
                         {
-                            !item[this.deletedField] &&
+                            !this.props.auth.user.admin &&
+                            <MenuItem onClick={ () => this.order(item) }>
+                                <ListItemIcon>
+                                    <VisibilityIcon/>
+                                </ListItemIcon>
+                                <ListItemText inset primary={ "Order" }/>
+                            </MenuItem>
+                        }
+                            
+                        {
+                            this.state.showView &&
+                            <MenuItem onClick={ () => this.handleMenuView(item) }>
+                                <ListItemIcon>
+                                    <VisibilityIcon/>
+                                </ListItemIcon>
+                                <ListItemText inset primary={ strings.table.view }/>
+                            </MenuItem>
+                        }
+
+                        {
+                            this.state.showEdit &&
+                            <MenuItem onClick={ () => this.handleMenuEdit(item) }>
+                                <ListItemIcon>
+                                    <EditIcon/>
+                                </ListItemIcon>
+                                <ListItemText inset primary={ strings.table.edit }/>
+                            </MenuItem>
+                        }
+                        
+                        {
+                            !item[this.deletedField] && this.state.showDelete &&
                             <MenuItem onClick={ () => this.handleMenuDelete(item) }>
                                 <ListItemIcon>
                                     <DeleteIcon/>
@@ -141,7 +185,7 @@ class UserList extends TablePage {
                             </MenuItem>
                         }
                         {
-                            item[this.deletedField] &&
+                            item[this.deletedField] && this.state.showDelete &&
                             <MenuItem onClick={ () => this.handleRestore(item) }>
                                 <ListItemIcon>
                                     <UndoIcon/>
@@ -165,9 +209,9 @@ function mapDispatchToProps(dispatch)
     }, dispatch);
 }
 
-function mapStateToProps({ menuReducers })
+function mapStateToProps({ menuReducers, authReducers })
 {
-    return { menu: menuReducers };
+    return { menu: menuReducers, auth: authReducers };
 }
 
-export default withSnackbar(withRouter(connect(mapStateToProps, mapDispatchToProps)(UserList)));
+export default withSnackbar(withRouter(connect(mapStateToProps, mapDispatchToProps)(PartList)));

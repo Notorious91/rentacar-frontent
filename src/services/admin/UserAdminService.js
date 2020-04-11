@@ -2,7 +2,7 @@ import {request} from "../../base/HTTP";
 import HttpMethod from "../../constants/HttpMethod";
 
 export async function getUsers(data) {
-    return await request('/api/admin/users/', data);
+    return await request('/api/user/all', data);
 }
 
 export async function getUser(id) {

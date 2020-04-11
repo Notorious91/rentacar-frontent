@@ -11,6 +11,10 @@ import BaseLayout from "./base/BaseLayout";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { SnackbarProvider, withSnackbar } from 'notistack';
+import { getAllCarCategories } from './services/admin/CarCategoryAdminService';
+import { getAllCarModels } from './services/admin/CarModelAdminService';
+
+import { loadCarCategories, loadCarModels } from './actions/Actions';
 
 const theme = createMuiTheme({typography: {
         useNextVariants: true,
@@ -48,6 +52,28 @@ const App = () => (
 );
 
 function load() {
+
+    getAllCarCategories().then(response => {
+
+        if(!response || !response.ok) {
+            return;
+        }
+
+        console.log(response.data);
+
+        store.dispatch(loadCarCategories(response.data ? response.data : []))
+    });
+
+    getAllCarModels().then(response => {
+
+        if(!response || !response.ok) {
+            return;
+        }
+
+        console.log(response.data);
+
+        store.dispatch(loadCarModels(response.data ? response.data : []))
+    });
 
 }
 

@@ -11,34 +11,27 @@ export async function login(username, password) {
     clearUserData();
 
     let data = {
-        client_id: CONFIG.clientId,
-        client_secret: CONFIG.clientSecret,
-        grant_type: 'password',
-        username: username,
+        email: username,
         password: password
     };
 
-    return await request('/oauth/v2/token', data, HttpMethod.GET).then((response) => {
+    return await request('/api/token', data, HttpMethod.POST).then((response) => {
 
             if(!response.ok) {
                 return response;
             }
 
-            setTokenToLocalStorage(response.data.access_token, response.data.refresh_token);
+            setTokenToLocalStorage(response.data, response.data);
 
-            return request('/api/users/current').then((response) => {
+            return request('/api/user/current').then((response) => {
 
-                if(response.data.user) {
+                if(response.data) {
 
-                    if(isUserOneOfRoles(response.data.user, CONFIG.rolesAllowed)) {
-                        setUserToLocalStorage(response.data.user)
-                    }
-                    else {
-
-                        clearUserData();
-                        response.ok = false;
-
-                    }
+                    setUserToLocalStorage(response.data)
+                }
+                else {
+                    clearUserData();
+                    response.ok = false;
                 }
 
                 return response;

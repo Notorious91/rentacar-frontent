@@ -7,14 +7,20 @@ import NotFound from "./pages/NotFound";
 import { Route } from 'react-router-dom';
 import { isUserLoggedIn } from "./base/OAuth";
 import Login from "./pages/user/Login";
+import Register from "./pages/user/Register";
 import Lock from "./pages/user/Lock";
 import UserList from "./pages/admin/users/UserList";
+import CarCategoryList from './pages/admin/carCategories/CarCategoryList';
+import CarModelList from './pages/admin/carModels/CarModelList';
+import CarList from './pages/admin/cars/CarList';
+import PartList from './pages/admin/parts/PartList';
+import OrderList from './pages/admin/orders/OrderList';
 
 let ROUTES = {
     Home: {
         path: '/',
         component: <Home/>,
-        auth: false
+        auth: true
     },
     Error: {
         path: '/error',
@@ -36,6 +42,11 @@ let ROUTES = {
         component: <Login/>,
         auth: false
     },
+    Register: {
+        path: '/register',
+        component: <Register/>,
+        auth: false
+    },
     Lock: {
         path: '/lock',
         component: <Lock/>,
@@ -46,6 +57,32 @@ let ROUTES = {
         component: <UserList showFilter={ false }/>,
         auth: true
     },
+    CarCategoryList: {
+        path: '/carCategories',
+        component: <CarCategoryList showFilter={ false }/>,
+        auth: true
+    },
+    CarModelList: {
+        path: '/carModels',
+        component: <CarModelList showFilter={ false }/>,
+        auth: true
+    },
+    CarList: {
+        path: '/cars',
+        component: <CarList showFilter={ false }/>,
+        auth: true
+    },
+    PartList: {
+        path: '/parts',
+        component: <PartList showFilter={ false }/>,
+        auth: true
+    },
+    OrderList: {
+        path: '/orders',
+        component: <OrderList showFilter={ false }/>,
+        auth: true
+    }
+    
 };
 
 export default ROUTES;

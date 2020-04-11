@@ -8,3 +8,7 @@ export async function resetPasswordRequest(data) {
 export async function resetPassword(data) {
     return await request('/api/users/password/reset_form', data, HttpMethod.POST);
 }
+
+export async function register(data) {
+    return await request('/api/user', data, HttpMethod.POST);
+} 

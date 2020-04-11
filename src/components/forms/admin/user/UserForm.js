@@ -24,6 +24,17 @@ const UserForm = ({
             value={ data.email }
         />
         <TextField
+            label={ strings.userForm.password }
+            error={ hasError(errors, 'password') }
+            helperText={ getError(errors, 'password') }
+            fullWidth
+            name='password'
+            type="password"
+            onChange={ onChange }
+            margin="normal"
+            value={ data.passwor }
+        />
+        <TextField
             label={ strings.userForm.firstName }
             error={ hasError(errors, 'firstName') }
             helperText={ getError(errors, 'firstName') }

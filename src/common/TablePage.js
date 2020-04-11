@@ -39,7 +39,7 @@ class TablePage extends Page {
 
     params = [
         { name: 'search', defaultValue: '' },
-        { name: 'page', defaultValue: 1 },
+        { name: 'page', defaultValue: 0 },
         { name: 'perPage', defaultValue: 30 }
     ];
 
@@ -61,7 +61,10 @@ class TablePage extends Page {
             selectedItem: undefined,
             pageState: PageState.View,
             showSearch: true,
-            showAdd: true
+            showAdd: true,
+            showView: true,
+            showEdit: true,
+            showDelete: true
         };
 
         this.props.changeFullScreen(false);
@@ -229,20 +232,27 @@ class TablePage extends Page {
                         open={ Boolean(this.state.anchorEl) }
                         onClose={ () => this.handleMenuClose() }
                     >
-                        <MenuItem onClick={ () => this.handleMenuView(item) }>
-                            <ListItemIcon>
-                                <VisibilityIcon/>
-                            </ListItemIcon>
-                            <ListItemText inset primary={ strings.table.view }/>
-                        </MenuItem>
-                        <MenuItem onClick={ () => this.handleMenuEdit(item) }>
-                            <ListItemIcon>
-                                <EditIcon/>
-                            </ListItemIcon>
-                            <ListItemText inset primary={ strings.table.edit }/>
-                        </MenuItem>
                         {
-                            !item[this.deletedField] &&
+                            this.state.showView &&
+                            <MenuItem onClick={ () => this.handleMenuView(item) }>
+                                <ListItemIcon>
+                                    <VisibilityIcon/>
+                                </ListItemIcon>
+                                <ListItemText inset primary={ strings.table.view }/>
+                            </MenuItem>
+                        }
+                        {
+                            this.state.showEdit &&
+                            <MenuItem onClick={ () => this.handleMenuEdit(item) }>
+                                <ListItemIcon>
+                                    <EditIcon/>
+                                </ListItemIcon>
+                                <ListItemText inset primary={ strings.table.edit }/>
+                            </MenuItem>
+                        }
+                        
+                        {
+                            !item[this.deletedField] && this.state.showDelete &&
                             <MenuItem onClick={ () => this.handleMenuDelete(item) }>
                                 <ListItemIcon>
                                     <DeleteIcon/>
@@ -251,7 +261,7 @@ class TablePage extends Page {
                             </MenuItem>
                         }
                         {
-                            item[this.deletedField] &&
+                            item[this.deletedField] && this.state.showDelete &&
                             <MenuItem onClick={ () => this.handleRestore(item) }>
                                 <ListItemIcon>
                                     <UndoIcon/>

@@ -3,6 +3,93 @@ import LocalizedStrings from 'react-localization';
 let strings = new LocalizedStrings({
 
     en: {
+
+        orderList: {
+            description: 'Description',
+            price: 'Price',
+            status: 'Status',
+            user: 'User'
+        },
+
+        carForm: {
+            carModel: 'Car model',
+            carCategory: 'Car category',
+            licencePlate: 'Licence plate',
+            price: 'Price'
+        },
+
+        carList: {
+            pageTitle: 'Cars',
+            licencePlate: 'Licence plate',
+            price: 'Price',
+            model: 'Model',
+            category: 'Category',
+            deleted: 'Deleted'
+        },
+
+        partList: {
+            pageTitle: 'Parts',
+            name: 'Name',
+            price: 'Price',
+            deleted: 'Deleted'
+        },
+
+        editPart: {
+            pageTitle: 'Edit part',
+            edited: 'Part edited',
+            errorEditing: 'Error editing part'
+        },
+
+        addPart: {
+            pageTitle: 'Add part',
+            added: 'Part added',
+            errorAdding: 'Error adding part'
+        },
+
+        partForm: {
+            name: 'Name',
+            price: 'Price'
+        },
+
+        editCarModel: {
+            pageTitle: 'Edit car model',
+            edited: 'Car model edited',
+            errorEditing: 'Error editing car model'
+        },
+
+        editCarCategory: {
+            pageTitle: 'Edit car category',
+            edited: 'Car category edited',
+            errorEditing: 'Error editing car category'
+        },
+
+        carCategoryList: {
+            name: "Name",
+            pageTitle: 'Car categories',
+            deleted: 'Car category deleted'
+        },
+        
+        carModelList: {
+            name: "Name",
+            pageTitle: "Car models"
+        },
+
+        carCategoryForm: {
+            name: 'Name'
+        },
+
+        addCarCategory: {
+            pageTitle: 'Add car category',
+            added: 'Car category added',
+            errorAdding: 'Error adding car category form'
+        },
+
+        addCarModel: {
+            pageTitle: 'Add car model',
+            added: 'Car model added',
+            errorAdding: 'Error adding car model form'
+        },
+
         menu: {
             Home: 'Home',
             Products: 'Products',
@@ -64,7 +151,8 @@ let strings = new LocalizedStrings({
             email: 'Email',
             password: 'Password',
             login: 'Login',
-            wrongCredentials: 'Wrong Credentials'
+            wrongCredentials: 'Wrong Credentials',
+            register: 'Register'
         },
 
         lock: {
@@ -91,7 +179,8 @@ let strings = new LocalizedStrings({
             firstName: 'First name',
             lastName: 'Last name',
             ok: 'Ok',
-            cancel: 'Cancel'
+            cancel: 'Cancel',
+            password: 'Password'
         },
 
         addUser: {

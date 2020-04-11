@@ -12,13 +12,17 @@ import Paper from '@material-ui/core/Paper';
 import LoginForm from "../../components/forms/user/LoginForm";
 import Validators from "../../constants/ValidatorTypes";
 import {login} from "../../base/OAuth";
+import UserForm from '../../components/forms/admin/user/UserForm';
+import { register } from '../../services/UserService';
 
 
-class Login extends Page {
+class Register extends Page {
 
     validationList = {
         email: [ {type: Validators.EMAIL } ],
-        password: [ {type: Validators.REQUIRED } ]
+        password: [ {type: Validators.REQUIRED } ],
+        firstName: [ {type: Validators.REQUIRED } ],
+        lastName: [ {type: Validators.REQUIRED } ]
     };
 
     constructor(props) {
@@ -49,25 +53,20 @@ class Login extends Page {
         }
     }
 
-    login() {
+    register() {
 
         if(!this.validate()) {
             return;
         }
 
-        login(this.state.data.email, this.state.data.password).then(response => {
+        register(this.state.data).then(response => {
 
-            if(!response.ok) {
-
-                this.setError('email', strings.login.wrongCredentials);
+            if(!response || !response.ok) {
                 return;
             }
 
-            this.props.login(response.data);
+            this.props.history.push('/login');
 
-            this.props.history.push({
-                pathname: this.state.redirectUrl
-            })
         });
     }
 
@@ -79,10 +78,9 @@ class Login extends Page {
                 <Grid item md={6}>
                     <Paper className='paper'>
 
-                        <h1>{ strings.login.login }</h1>
+                        <h1>{ strings.login.register }</h1>
 
-
-                        <LoginForm onSubmit={ () => this.login() } onChange={ this.changeData }
+                        <UserForm onSubmit={ () => this.register() } onChange={ this.changeData }
                                    keyPress={ this.keyPress }
                                    data={ this.state.data } errors={ this.state.errors }/>
                     </Paper>
@@ -105,4 +103,4 @@ function mapStateToProps({ menuReducers, authReducers })
     return { menu: menuReducers, auth: authReducers };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
