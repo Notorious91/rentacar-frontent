@@ -23,7 +23,8 @@ class PartList extends TablePage {
 
     tableDescription = [
         { key: 'name', label: strings.partList.name },
-        { key: 'price', label: strings.partList.price }
+        { key: 'price', label: strings.partList.price },
+        { key: 'image', label: strings.carList.image, transform: 'columnImageRender' }
     ];
 
     constructor(props) {
@@ -44,6 +45,10 @@ class PartList extends TablePage {
         this.state.showAdd = this.props.auth.user.admin;
         this.state.showEdit = this.props.auth.user.admin;
         this.state.showDelete = this.props.auth.user.admin;
+    }
+
+    columnImageRender(item) {
+        return <img src={'data:image/png;base64,' + item} style={{ width: '200px' }}/>
     }
 
     fetchData() {

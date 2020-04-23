@@ -11,7 +11,10 @@ const CarForm = ({
                       errors,
                       data,
                       carModels,
-                      carCategories
+                      carCategories,
+                      onFileChange,
+                      uploadFile,
+                      preview
                   }) => (
 
     <form id='user-form'>
@@ -66,6 +69,37 @@ const CarForm = ({
                 { strings.userForm.cancel }
             </Button>
         </div>
+
+        {
+            data.id && 
+            <div style={{ marginTop: '50px' }}>
+                <div>
+                    {
+                        preview &&
+                        <img src={preview} style={{ width: '350px', marginBottom: '20px' }}/>
+                    }
+                </div>
+
+                <Button
+                    variant="contained"
+                    component="label"
+                    >
+                    Select File
+                    <input
+                        accept="image/*"
+                        onChange={onFileChange}
+                        type="file"
+                        style={{ display: "none" }}
+                    />
+                </Button>
+
+                <div>
+                    <Button variant="contained" color="primary" style={{ marginTop: '20px' }} onClick={uploadFile}>
+                        Upload
+                    </Button>
+                </div>
+            </div>
+        }
     </form>
 );
 

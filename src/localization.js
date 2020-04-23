@@ -24,7 +24,8 @@ let strings = new LocalizedStrings({
             price: 'Price',
             model: 'Model',
             category: 'Category',
-            deleted: 'Deleted'
+            deleted: 'Deleted',
+            image: 'Image'
         },
 
         partList: {

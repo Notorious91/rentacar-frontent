@@ -14,7 +14,7 @@ import {withSnackbar} from "notistack";
 import CarCategoryForm from '../../../components/forms/admin/carCategory/CarCategoryForm';
 import { addCarCategory } from '../../../services/admin/CarCategoryAdminService';
 import { addCarModel } from '../../../services/admin/CarModelAdminService';
-import { addCars } from '../../../services/admin/UserCarService';
+import { addCars, uploadImage } from '../../../services/admin/UserCarService';
 import CarForm from '../../../components/forms/admin/part/CarForm';
 
 class AddCar extends FormComponent {

@@ -1,4 +1,4 @@
-import {request} from "../../base/HTTP";
+import {request, requestFile} from "../../base/HTTP";
 import HttpMethod from "../../constants/HttpMethod";
 
 export async function getCars(data) {
@@ -15,6 +15,14 @@ export async function editCars(data) {
 
 export async function deleteCars(id) {
     return await request('/api/car/' + id,{}, HttpMethod.DELETE);
+}
+
+export async function uploadImage(id, image) {
+
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return await requestFile('/api/car/image/' + id, formData, HttpMethod.POST);
 }
 
 function transformData(data) {

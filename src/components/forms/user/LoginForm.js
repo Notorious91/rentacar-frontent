@@ -9,7 +9,8 @@ const LoginForm = ({
     onChange,
     errors,
     data,
-    keyPress
+    keyPress,
+    register
 }) => (
     <form id="login-form" onSubmit={ onSubmit } action = "#">
         <TextField
@@ -42,7 +43,11 @@ const LoginForm = ({
             <Button variant="contained" color="primary" onClick={ onSubmit }>
                 { strings.login.login }
             </Button>
+            <Button variant="contained" color="primary" onClick={ register } style={{ marginLeft: '15px' }}>
+                Register
+            </Button>
         </div>
+
     </form>
 );
 

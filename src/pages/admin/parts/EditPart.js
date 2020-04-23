@@ -9,7 +9,7 @@ import strings from "../../../localization";
 import Validators from "../../../constants/ValidatorTypes";
 import FormComponent from "../../../common/FormComponent";
 import {withSnackbar} from "notistack";
-import { editPart } from '../../../services/admin/PartAdminService';
+import { editPart, uploadPartImage } from '../../../services/admin/PartAdminService';
 import PartForm from '../../../components/forms/admin/part/PartForm';
 
 class EditPart extends FormComponent {
@@ -30,6 +30,49 @@ class EditPart extends FormComponent {
         this.props.changeFullScreen(false);
 
         this.submit = this.submit.bind(this);
+
+        this.onFileChange = this.onFileChange.bind(this);
+        this.uploadFile = this.uploadFile.bind(this);
+    }
+
+    componentDidMount() {
+        if(!this.props.data.image) {
+            return;
+        }
+
+        this.setState({
+            preview: 'data:image/png;base64,' + this.props.data.image,
+            image: this.props.data.image
+        })
+    }
+
+    componentWillMount(props) {
+        if(!props || !props.data.image) {
+            return;
+        }
+
+        this.setState({
+            preview: 'data:image/png;base64,' + props.data.image,
+            image: props.data.image
+        })
+    }
+
+    onFileChange(event) {
+
+        this.setState({
+            image: event.target.files[0],
+            preview: URL.createObjectURL(event.target.files[0])
+        })
+
+    }
+
+    uploadFile() {
+
+        uploadPartImage(this.state.data.id, this.state.image).then(response => {
+
+            this.props.onFinish(null);
+        })
+
     }
 
     submit() {
@@ -66,6 +109,9 @@ class EditPart extends FormComponent {
 
                 <Paper className='paper'>
                     <PartForm onChange={ this.changeData } onSubmit={ this.submit }
+                                onFileChange={this.onFileChange}
+                                uploadFile={this.uploadFile}
+                                preview={this.state.preview}
                                 data={ this.state.data } errors={ this.state.errors } onCancel={ this.props.onCancel }/>
                 </Paper>
 

@@ -33,6 +33,7 @@ class Login extends Page {
         this.props.changeFullScreen(true);
 
         this.keyPress = this.keyPress.bind(this);
+        this.register = this.register.bind(this);
     }
 
     componentDidMount() {
@@ -71,6 +72,10 @@ class Login extends Page {
         });
     }
 
+    register() {
+        this.props.history.push('register');
+    }
+
     render() {
 
         return (
@@ -84,6 +89,7 @@ class Login extends Page {
 
                         <LoginForm onSubmit={ () => this.login() } onChange={ this.changeData }
                                    keyPress={ this.keyPress }
+                                   register={ this.register }
                                    data={ this.state.data } errors={ this.state.errors }/>
                     </Paper>
                 </Grid>

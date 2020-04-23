@@ -14,7 +14,7 @@ import {withSnackbar} from "notistack";
 import CarCategoryForm from '../../../components/forms/admin/carCategory/CarCategoryForm';
 import { addCarCategory } from '../../../services/admin/CarCategoryAdminService';
 import { addCarModel } from '../../../services/admin/CarModelAdminService';
-import { addCars, editCars } from '../../../services/admin/UserCarService';
+import { addCars, editCars, uploadImage } from '../../../services/admin/UserCarService';
 import CarForm from '../../../components/forms/admin/part/CarForm';
 
 class EditCar extends FormComponent {
@@ -37,6 +37,31 @@ class EditCar extends FormComponent {
         this.props.changeFullScreen(false);
 
         this.submit = this.submit.bind(this);
+
+        this.onFileChange = this.onFileChange.bind(this);
+        this.uploadFile = this.uploadFile.bind(this);
+    }
+
+    componentDidMount() {
+        if(!this.props.data.image) {
+            return;
+        }
+
+        this.setState({
+            preview: 'data:image/png;base64,' + this.props.data.image,
+            image: this.props.data.image
+        })
+    }
+
+    componentWillMount(props) {
+        if(!props || !props.data.image) {
+            return;
+        }
+
+        this.setState({
+            preview: 'data:image/png;base64,' + props.data.image,
+            image: props.data.image
+        })
     }
 
     submit() {
@@ -62,6 +87,24 @@ class EditCar extends FormComponent {
         });
     }
 
+    onFileChange(event) {
+
+        this.setState({
+            image: event.target.files[0],
+            preview: URL.createObjectURL(event.target.files[0])
+        })
+
+    }
+
+    uploadFile() {
+
+        uploadImage(this.state.data.id, this.state.image).then(response => {
+
+            this.props.onFinish(null);
+        })
+
+    }
+
     render() {
 
         return (
@@ -75,6 +118,9 @@ class EditCar extends FormComponent {
                     <CarForm onChange={ this.changeData } onSubmit={ this.submit }
                         carCategories={ this.props.siteData.carCategories }
                         carModels={ this.props.siteData.carModels }
+                        onFileChange={this.onFileChange}
+                        uploadFile={this.uploadFile}
+                        preview={this.state.preview}
                         data={ this.state.data } errors={ this.state.errors } onCancel={ this.props.onCancel }/>
                 </Paper>
 

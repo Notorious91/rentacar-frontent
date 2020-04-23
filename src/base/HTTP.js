@@ -78,14 +78,15 @@ export async function requestFile(url, data = [], method = HttpMethod.GET) {
             'Access-Control-Allow-Credentials':'true',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'Authorization',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'content-type': 'multipart/form-data'
         };
 
         if (tokenType) {
-            headers['Authorization'] = getToken();
+            //headers['Authorization'] = getToken();
         }
 
-        return await connect(CONFIG.baseUrl + url, headers, data, method, false);
+        return await connect(url, data, method, headers);
     } catch (error) {
         history.push("/error");
     }

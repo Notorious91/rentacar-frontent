@@ -28,12 +28,17 @@ class CarList extends TablePage {
         { key: 'price', label: strings.carList.price },
         { key: 'model', label: strings.carList.model , transform: 'columnCarModelRender' },
         { key: 'category', label: strings.carList.category, transform: 'columnCarCategoryRender' },
+        { key: 'image', label: strings.carList.image, transform: 'columnImageRender' },
     ];
 
     constructor(props) {
         super(props);
 
         this.state.showView = false;
+    }
+
+    columnImageRender(item) {
+        return <img src={'data:image/png;base64,' + item} style={{ width: '200px' }}/>
     }
 
     columnCarModelRender(item) {
