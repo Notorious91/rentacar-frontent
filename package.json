@@ -17,7 +17,7 @@
     "react": "^16.8.4",
     "react-beautiful-dnd": "^8.0.2",
     "react-click-outside": "^3.0.1",
-    "react-dev-utils": "^7.0.5",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.8.1",
     "react-draft-wysiwyg": "^1.12.13",
     "react-dragula": "^1.1.17",
